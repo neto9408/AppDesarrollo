@@ -53,7 +53,7 @@ passport.use(
   new FacebookStrategy({
     clientID: '396811740700898',
     clientSecret: 'bb3fe1a6b86b0458654b4b29d6779e50',
-    callbackURL: "http://localhost:3000/users/auth/facebook/callback"
+    callbackURL: "https://registrarnm.herokuapp.com/users/auth/facebook/callback"
   },
 
     function (res, refreshToken, profile, done) {
