@@ -1,11 +1,10 @@
-<% include partial/header %>
+<% include partials/header %>
 
 <div class="row">
-<div class="col-xs-10 col-xs-offset-1">
-<div class="container">
+    <div class="container">
     
 
-    <div class="omb_login">
+        <div class="omb_login">
     	<h3 class="omb_authTitle">Login or <a href="#">Sign up</a></h3>
 		<div class="row omb_row-sm-offset-3 omb_socialButtons">
     	    <div class="col-xs-4 col-sm-2">
@@ -37,35 +36,36 @@
 
 		<div class="row omb_row-sm-offset-3">
 			<div class="col-xs-12 col-sm-6">	
-			    <form class="omb_loginForm" action="/users/signUp" autocomplete="off" method="POST">
-				    <div class="input-group">
-						<span class="input-group-addon"><i class="fa fa-user"></i></span>
-						<input type="text" class="form-control" name="nombre" placeholder="Nombre">
-					</div>
-					<span class="help-block"></span>
+			    <form class="omb_loginForm" action="/users/singUp" autocomplete="off" method="POST">
 					<div class="input-group">
 						<span class="input-group-addon"><i class="fa fa-user"></i></span>
-						<input type="text" class="form-control" name="apellido" placeholder="Apellido">
+						<input type="text" class="form-control" id="nombre" name="nombre" placeholder="Firstname">
 					</div>
 					<span class="help-block"></span>
+
 					<div class="input-group">
 						<span class="input-group-addon"><i class="fa fa-user"></i></span>
-						<input type="text" class="form-control" name="correo" placeholder="Correo">
+						<input type="text" class="form-control" id="apellido" name="apellido" placeholder="Lastname">
+					</div>
+					<span class="help-block"></span>
+
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-user"></i></span>
+						<input type="email" class="form-control" id="correo" name="correo" placeholder="email address">
 					</div>
 					<span class="help-block"></span>
 										
 					<div class="input-group">
 						<span class="input-group-addon"><i class="fa fa-lock"></i></span>
-						<input  type="password" class="form-control" name="clave" placeholder="Password">
+						<input  type="password" class="form-control" id="clave" name="clave" placeholder="Password">
 					</div>
                     <span class="help-block">
-					<% if (typeof error !=='undefined'){ %>
-					<%= error %>
-					<% } %>
+					<% if(typeof error !== 'undefined'){ %>
+						<%= error %>
+					<% }%>
 					</span>
-					
 
-					<button class="btn btn-lg btn-primary btn-block" type="submit">Crear Usuario</button>
+					<button class="btn btn-lg btn-primary btn-block" type="submit">Sing Up</button>
 				</form>
 			</div>
     	</div>
@@ -87,6 +87,5 @@
 
         </div>
 </div>
-</div>
 
-<% include partial/footer %>
+<% include partials/footer %>

@@ -4,42 +4,38 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-//librerias de passport
+
+//Librerias para passport
 var passport = require("passport");
-var localStrategy = require("passport-local").Strategy;
+var LocalStrategy = require("passport-local").Strategy;
 var FacebookStrategy = require("passport-facebook").Strategy;
-var session = require("body-parser");
+var session = require("express-session");
 var bcrypt = require("bcrypt-nodejs");
 var UsuarioModel = require("./models/usuarios");
+var User = require("./models/user");
 
-//mongoose
+//Mongoose
 var mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://prueba:prueba@ds141490.mlab.com:41490/usadb");
-
-
+mongoose.connect("mongodb://172.30.10.55:27017/Test");
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
 
-app.use(session({ secret: "es una frae", cookie: { maxAge: 60000 }, resave: true, saveUninitialize: true }));
-app.use(passport.initialize());
-app.use(passport.session());
-
-//configuracion passport
-passport.use(new localStrategy(
+//Configuracion passport
+passport.use(new LocalStrategy(
   function (correo, clave, done) {
     new UsuarioModel.usuarios({ correo: correo }).fetch().then(
       function (info) {
         var usuarioInfo = info;
         if (usuarioInfo == null) {
-          return done(null, false, { mensaje: "email no valido" });
+          return done(null, false, { mensaje: "Email no valido." });
         } else {
           usuarioInfo = usuarioInfo.toJSON();
           if (!bcrypt.compareSync(clave, usuarioInfo.clave)) {
-            return done(null, false, { mensaje: "clave  no valido" });
+            return done(null, false, { mensaje: "Clave no valida." });
           } else {
             return done(null, usuarioInfo);
           }
@@ -50,14 +46,40 @@ passport.use(new localStrategy(
 ));
 
 passport.use(
-  new FacebookStrategy({
-    clientID: '396811740700898',
-    clientSecret: 'bb3fe1a6b86b0458654b4b29d6779e50',
-    callbackURL: "https://registrarnm.herokuapp.com/users/auth/facebook/callback"
-  },
-
-    function (res, refreshToken, profile, done) {
-      console.log(profile);
+  new FacebookStrategy(
+    {
+      clientID: '1999330080294299',
+      clientSecret: '0a1a06086c79b0c10d8c13d0967ca193',
+      callbackURL: "http://localhost:3000/users/auth/facebook/callback",
+      profileFields: ["email", "displayName"]
+    },
+    function (token, refreshToke, profile, done) {
+      process.nextTick(
+        function () {
+          User.findOne(
+            { 'facebook.id': profile.id },
+            function (err, user) {
+              if (err) return done(err);
+              if (user) {
+                return done(null, user);
+              } else {
+                var newUser = new User();
+                newUser.facebook.id = profile.id;
+                newUser.facebook.token = token;
+                newUser.facebook.name = profile.displayName;
+                newUser.facebook.email = profile.id;
+                newUser.save(
+                  function (err) {
+                    if (err)
+                      throw err;
+                    return done(null, newUser);
+                  }
+                );
+              }
+            }
+          );
+        }
+      );
     }
   )
 );
@@ -67,10 +89,11 @@ passport.serializeUser(
     done(null, usuario);
   }
 );
+
 passport.deserializeUser(
   function (id, done) {
-    User.findeById(Id, function (err, user) {
-      done(error, user);
+    User.findById(id, function (err, user) {
+      done(err, user);
     });
   },
   function (usuario, done) {
@@ -82,8 +105,6 @@ passport.deserializeUser(
   }
 );
 
-
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -93,6 +114,11 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(session({ secret: "Es una frase", cookie: { maxAge: 60000 }, resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
