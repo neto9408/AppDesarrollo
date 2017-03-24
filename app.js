@@ -48,8 +48,8 @@ passport.use(new LocalStrategy(
 passport.use(
   new FacebookStrategy(
     {
-      clientID: '1999330080294299',
-      clientSecret: '0a1a06086c79b0c10d8c13d0967ca193',
+      clientID: '396811740700898',
+      clientSecret: 'bb3fe1a6b86b0458654b4b29d6779e50',
       callbackURL: "https://registrarnm.herokuapp.com/users/auth/facebook/callback",
       profileFields: ["email", "displayName"]
     },
