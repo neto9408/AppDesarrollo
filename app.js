@@ -17,7 +17,7 @@ var User = require("./models/user");
 //Mongoose
 var mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://172.30.10.55:27017/Test");
+mongoose.connect("mongodb://prueba:prueba@ds141490.mlab.com:41490/usadb");
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -50,7 +50,7 @@ passport.use(
     {
       clientID: '1999330080294299',
       clientSecret: '0a1a06086c79b0c10d8c13d0967ca193',
-      callbackURL: "http://localhost:3000/users/auth/facebook/callback",
+      callbackURL: "https://registrarnm.herokuapp.com/users/auth/facebook/callback",
       profileFields: ["email", "displayName"]
     },
     function (token, refreshToke, profile, done) {
