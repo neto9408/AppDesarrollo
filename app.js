@@ -15,7 +15,7 @@ var UsuarioModel = require("./models/usuarios");
 //mongoose
 var mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://<prueba>:<prueba  >@ds141490.mlab.com:41490/usadb");
+mongoose.connect("mongodb://prueba:prueba@ds141490.mlab.com:41490/usadb");
 
 
 
